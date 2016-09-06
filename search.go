@@ -38,12 +38,11 @@ func check(e error) {
 }
 
 func nixos_hash() string {
-	out, cmd_err := exec.Command("nixos-version", "--hash").Output()
-	// TODO: Remove double quotes in result
-	//out, cmd_err := exec.Command("nix-instantiate", "--eval", "-E", "(import <nixpkgs> {}).lib.nixpkgsVersion").Output()
+	// TODO: Better way to get the current nixpkgs version?
+	out, cmd_err := exec.Command("nix-instantiate", "--eval", "-E", "(import <nixpkgs> {}).lib.nixpkgsVersion").Output()
 	check(cmd_err)
 	result := fmt.Sprintf("%s", out)
-	return strings.TrimSpace(result)
+	return strings.Trim(result, "\n \"")
 }
 
 func Search(pattern string) {
@@ -68,7 +67,7 @@ func Search(pattern string) {
 	json_err := json.Unmarshal(packages_json, &packages)
 	if json_err != nil {
 		// TODO: Figure out which thing is not matching the expected struct
-		log.Println(json_err)
+		//log.Println(json_err)
 	}
 
 	// Sort packages by key
