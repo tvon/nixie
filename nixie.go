@@ -7,7 +7,7 @@ import (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "nix"
+	app.Name = "nixie"
 	app.Version = "0.0.1"
 
 	app.Commands = []cli.Command{
