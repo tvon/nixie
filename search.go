@@ -48,12 +48,11 @@ func nixos_hash() string {
 
 func Search(pattern string) {
 	version := nixos_hash()
-	cache_file := fmt.Sprintf("/tmp/nix-packages-%s.json", version)
+	cache_file := fmt.Sprintf("/tmp/nixie-%s.json", version)
 
 	// TODO: Flag to update cache
 	if _, err := os.Stat(cache_file); os.IsNotExist(err) {
 		fmt.Println("Building cache", cache_file)
-		//log.Printf("Cache file not present, creating %s\n", cache_file)
 
 		out, cmd_err := exec.Command("nix-env", "-qa", "--json", "*").Output()
 		check(cmd_err)
@@ -69,7 +68,7 @@ func Search(pattern string) {
 	json_err := json.Unmarshal(packages_json, &packages)
 	if json_err != nil {
 		// TODO: Figure out which thing is not matching the expected struct
-		//log.Println(json_err)
+		log.Println(json_err)
 	}
 
 	// Sort packages by key
